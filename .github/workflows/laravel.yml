@@ -1,15 +1,16 @@
-name: PHP Tests
+name: PHP Composer
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,21 +20,27 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.3'
-        extensions: mbstring, xml, bcmath, pdo, pdo_mysql, zip
-        coverage: 'none'
+        php-version: '8.2'
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: composer install
+
+    - name: Check if .env file exists
+      run: test -f .env  cp .env.example .env
+
+    - name: Generate application key
+      run: php artisan key:generate
+
+    - name: Migrate database
+      run: php artisan migrate --env=testing --force
 
     - name: Run tests
-      run: ./vendor/bin/pest
-      continue-on-error: true
+      run: ./vendor/bin/pest  echo "Tests success" && exit 1
 
     - name: Send email on failure
       if: failure()
       run: |
         echo "Sending email on failure..."
-        echo "Build failed for commit ${GITHUB_SHA}" | mail -s "Build Failed" tongsreng@itc.edu.kh
+        echo "Build failed for commit ${GITHUB_SHA}" | mail -s "Build Failed" mastersokchhayfap@gmail.com
         git log -1 --pretty=format:"%an" | xargs -I {} echo "Notifying committer {}"
         git show --quiet --pretty=format:%B ${GITHUB_SHA} | mail -s "Build Failure Details" $(git log -1 --pretty=format:"%an" ${GITHUB_SHA})
