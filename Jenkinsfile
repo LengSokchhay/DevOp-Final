@@ -1,14 +1,10 @@
 pipeline {
     agent any // windows agent, Jenkins-Laravel (other machine)
-    environment {
-        BOT_TOKEN = '6451695822:AAEvuVexMDi5jgKLycHSe_q45vvSFrsp9b8'
-        CHAT_ID = '-1002142392049'
-    }
     stages {
         stage('Fetch from GitHub') { // build steps
             steps {
                 echo 'Fetching from GitHub'
-                git branch: 'FinalExam_Jenkins', url:'https://github.com/Mony-Ratanak/DevOps.git'
+                git branch: 'FinalExam_Jenkins', url:'https://github.com/LengSokchhay/DevOp-Final.git'
             }
         }
         stage('Build using Tools') {
