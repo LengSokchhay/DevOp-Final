@@ -4,7 +4,7 @@ pipeline {
         stage('Fetch from GitHub') { // build steps
             steps {
                 echo 'Fetching from GitHub'
-                git branch: 'FinalExam_Jenkins', url:'https://github.com/LengSokchhay/DevOp-Final.git'
+                git branch: 'Final_Jenkins', url:'https://github.com/LengSokchhay/DevOp-Final.git'
             }
         }
         stage('Build using Tools') {
@@ -26,12 +26,12 @@ pipeline {
     post {
         success {
             sh '''
-                bash scripts/deployment.sh SUCCESS🟢
+                bash scripts/deployment.sh SUCCESS
             '''
         }
         failure {
             sh '''
-                bash scripts/deployment.sh FAILED🔴
+                bash scripts/deployment.sh FAILED
             '''
         }
     }
