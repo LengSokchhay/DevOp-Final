@@ -26,7 +26,7 @@ jobs:
       run: composer install
 
     - name: Check if .env file exists
-      run: test -f .env  cp .env.example .env
+      run: cp .env.example .env
 
     - name: Generate application key
       run: php artisan key:generate
